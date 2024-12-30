@@ -5,9 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCreateUserMutation } from '../../redux/features/user/userApi'
 import { PageTitle } from "components/pageTitle";
+import { useEffect } from "react";
+import { handleError, handleSuccess } from "core/commons";
+import { useRouter } from "next/navigation";
 
 export default function Register() {
-  const [registerUser] = useCreateUserMutation() ;
+  const router = useRouter();
+  const [registerUser, {isError, error, isSuccess}] = useCreateUserMutation() ;
 
   const formik = useFormik({
     initialValues: {
@@ -22,6 +26,20 @@ export default function Register() {
       resetForm();
     },
   });
+
+  useEffect(() => {
+    if (isError) {
+      const apiError = error as ApiError; 
+      handleError(apiError.data.message || 'An error occurred');
+    };
+  }, [isError]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      handleSuccess('Successful');
+      router.push('/login');
+    };
+  }, [isSuccess, router]);
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
