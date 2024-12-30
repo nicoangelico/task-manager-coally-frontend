@@ -8,6 +8,7 @@ import { PageTitle } from "components/pageTitle";
 import { useEffect } from "react";
 import { handleError, handleSuccess } from "core/commons";
 import { useRouter } from "next/navigation";
+import { ApiError } from "interfaces/error";
 
 export default function Register() {
   const router = useRouter();
